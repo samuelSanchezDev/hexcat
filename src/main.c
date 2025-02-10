@@ -28,7 +28,7 @@ typedef enum INVALID_COMBINATION {
     END_MGS,
     RANGE_MGS,
     NUM_BYTES_MGS,
-    BYTE_OFFSET_MGS,
+    BYTE_OFFSET_MGS
 } Invalid_Combination;
 
 /**
@@ -65,9 +65,9 @@ int main(int argc, char* argv[]) {
     int has_end = 0;
     int has_range = 0;
     int has_num_bytes = 0;
-    int has_byte_offset = 0;
-    int has_version = 0;
 
+    char* range_start = NULL;
+    char* range_end = NULL;
     int opt;
 
     struct option long_options[] = {
@@ -111,18 +111,17 @@ int main(int argc, char* argv[]) {
                 break;
 
             case 'b': /* Byte offset */
-                has_byte_offset = 1;
                 offset = strtol(optarg, NULL, 0);
                 break;
 
             case 'r': /* Range */
                 has_range = 1;
-                if (has_start || has_end || num_bytes) {
+                if (has_start || has_end || has_num_bytes) {
                     print_invalid_message(RANGE_MGS);
                     return 1;
                 }
-                char* range_start = strtok(optarg, ":");
-                char* range_end = strtok(NULL, ":");
+                range_start = strtok(optarg, ":");
+                range_end = strtok(NULL, ":");
                 if (!range_start || !range_end) {
                     fprintf(stderr, "Invalid range format. ");
                     fprintf(stderr, "Use --range <start>:<end>.\n");
@@ -159,12 +158,12 @@ int main(int argc, char* argv[]) {
         /* It is verified that start is less than end. */
         if (start >= end) {
             fprintf(stderr, "Error: You cannot start after the end.\n");
+            return 1;
         }
-        return 1;
     }
 
     if (has_num_bytes) {
-        end = start + has_num_bytes;
+        end = start + num_bytes;
     }
 
     return hexcat(file, start, end, offset);
@@ -205,9 +204,7 @@ void print_invalid_message(Invalid_Combination type) {
             fprintf(stderr, "--num-bytes cannot be used with ");
             fprintf(stderr, "--end or --range.\n");
             break;
-        case BYTE_OFFSET_MGS:
-            /* They do not exist. */
         default:
-            /* TODO */
+            fprintf(stderr, "You cannot be here.\n");
     }
 }
