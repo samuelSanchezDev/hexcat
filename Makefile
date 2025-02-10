@@ -7,6 +7,7 @@ SRC := src
 INCLUDE := include
 BUILD := build
 BIN := bin
+TEST := test
 
 all: $(EXEC)
 
@@ -15,6 +16,10 @@ $(EXEC): $(SRC)/main.c $(BUILD)/hexcat.o
 
 $(BUILD)/hexcat.o: $(SRC)/hexcat.c $(INCLUDE)/hexcat.h
 	$(CC) $(CVERSION) $(CFLAGS) -c -o $@ $<
+
+test: $(EXEC)
+	$(CC) $(CFLAGS) -o $(BIN)/$@ $(TEST)/$@.c
+	valgrind --track-origins=yes --leak-check=full $(BIN)/$@
 
 .PHONY: clean
 clean:
