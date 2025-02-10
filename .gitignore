@@ -53,3 +53,10 @@ dkms.conf
 
 # IDE/Editor files
 .vscode/
+
+# C folders
+bin/
+build/
+
+# Temporal files
+*.tmp
