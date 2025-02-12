@@ -1,3 +1,18 @@
+/**
+ * @file test.c
+ * @author Samuel Sánchez
+ * @date 10 Feb 2025
+ * @brief Test suite for the `hexcat` program.
+ *
+ * This file contains a set of automated tests for the `hexcat` program.
+ * It runs `hexcat` with predefined input arguments and compares its output
+ * against expected results.
+ *
+ * The testing framework captures the output of `hexcat`, checks for 
+ * discrepancies, and reports success or failure. If a test fails, both the 
+ * actual and expected outputs are displayed for debugging purposes.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -158,9 +173,9 @@ void display_output(const char* actual_output,
                     int actual_output_length,
                     const char* expected_output,
                     int expected_output_length) {
-    printf("--------------------ACTUAL OUTPUT---------------------\n");
+    printf("--------------------ACTUAL OUTPUT---------------------[%d]\n", actual_output_length);
     printf("%.*s", actual_output_length, actual_output);
-    printf("\n-------------------EXPECTED OUTPUT-------------------\n");
+    printf("\n-------------------EXPECTED OUTPUT-------------------[%d]\n", expected_output_length);
     printf("%.*s", expected_output_length, expected_output);
     printf("\n------------------------------------------------------\n");
 }

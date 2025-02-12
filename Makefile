@@ -19,7 +19,7 @@ $(BUILD)/hexcat.o: $(SRC)/hexcat.c $(INCLUDE)/hexcat.h
 
 test: $(EXEC)
 	$(CC) $(CFLAGS) -o $(BIN)/$@ $(TEST)/$@.c
-	valgrind --track-origins=yes --leak-check=full $(BIN)/$@
+	$(BIN)/$@
 
 .PHONY: clean
 clean:

@@ -44,6 +44,7 @@ int hexcat(const char* filename, int start, int end, int offset) {
     unsigned char* row = NULL;
     int row_len = 0;
     int end_loop = 0;
+    int end_flag = 0;
 
     /* Open file. */
     file = fopen(filename, "rb");
@@ -71,6 +72,10 @@ int hexcat(const char* filename, int start, int end, int offset) {
         }
     }
 
+    if (end > 0) {
+        end_flag = 1;
+    }
+
     row = (unsigned char*)calloc(ROW_LEN, sizeof(char));
     if (!row) {
         fprintf(stderr, "Memory allocation error.");
@@ -85,13 +90,20 @@ int hexcat(const char* filename, int start, int end, int offset) {
     while (!end_loop) {
         row_len = fread(row, sizeof(unsigned char), ROW_LEN, file);
 
-        /* Check if end of file is reached. */
-        if (row_len != ROW_LEN) {
+        if (row_len != ROW_LEN) { /* Check if end of file is reached. */
+            if (row_len == 0) {   /* Final reached without content to print. */
+                break;
+            }
             end_loop = 1;
-            /* Check if the end position has been reached. */
-        } else if ((end > 0) && (byte_counter + row_len >= end)) {
-            end_loop = 1;
-            row_len = end - byte_counter;
+
+        } else if (end_flag) { /* Check if the end position has been reached. */
+            if (byte_counter + row_len >= end) {
+                end_loop = 1;
+                /* The addition of the 1 is to convert the position of the last
+                 * byte to the size. Example: Position 46 corresponds to 47
+                 * bytes. */
+                row_len = (end + 1) - byte_counter;
+            }
         }
 
         print_row(row, row_len, byte_counter);

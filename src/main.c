@@ -163,7 +163,14 @@ int main(int argc, char* argv[]) {
     }
 
     if (has_num_bytes) {
-        end = start + num_bytes;
+        /* The byte count starts at 0, 1 is subtracted to correctly represent
+         * the range. For example, displaying 60 bytes means ending at byte 59.
+         */
+        if (!has_start) {
+            end = num_bytes - 1;
+        } else {
+            end = start + num_bytes - 1;
+        }
     }
 
     return hexcat(file, start, end, offset);
