@@ -1,5 +1,5 @@
 # hexcat
-hexcat is a command-line utility that allows users to view the contents of a file in hexadecimal format.
+hexcat (v1.0.0) is a command-line utility that allows users to view the contents of a file in hexadecimal format.
 
 Features
 - Display file contents in hexadecimal format.
