@@ -9,7 +9,10 @@ BUILD := build
 BIN := bin
 TEST := test
 
-all: $(EXEC)
+all: build $(EXEC)
+
+build:
+	mkdir -p $(BUILD) $(BIN)
 
 $(EXEC): $(SRC)/main.c $(BUILD)/hexcat.o
 	$(CC) $(CVERSION) $(CFLAGS) -o $(BIN)/$(EXEC) $^
